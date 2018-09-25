@@ -41,13 +41,13 @@ def put_product(request):
         #test = "http://test/test?"
         #test += request.read().decode('utf-8')
         request_data  = ((request.body).decode('utf-8'))
-        request_data = json.loads(request_data)
+        request_data_par = json.loads(request_data)
 
         #parsed = urlparse.urlparse(test)
         #pro_name = urlparse.parse_qs(parsed.query)['pro_name'][0]
         #pro_count = urlparse.parse_qs(parsed.query)['pro_count'][0]
-        pro_name = request_data['pro_name']
-        pro_count = request_data['pro_count']
+        pro_name = request_data_par['pro_name']
+        pro_count = request_data_par['pro_count']
 
         staff_data = [(str(pro_name),str(pro_count))]
         for p in staff_data:
@@ -77,11 +77,12 @@ def update_product(request):
     cursor = connection.cursor()
 
     if request.method == 'PUT':
-        test = "http://test/test?"
-        test += request.read().decode('utf-8')
-        parsed = urlparse.urlparse(test)
-        pro_name = urlparse.parse_qs(parsed.query)['pro_name'][0]
-        pro_count = urlparse.parse_qs(parsed.query)['pro_count'][0]
+        request_data  = ((request.body).decode('utf-8'))
+        request_data_par = json.loads(request_data)
+        #request_data is parsed data
+        pro_name = request_data_par['pro_name']
+        pro_count = request_data_par['pro_count']
+
         staff_data = [(str(pro_name),str(pro_count))]
         for p in staff_data:
             format_str = "UPDATE jungjong_product_real set pro_count= \'" + pro_count + "\' WHERE pro_name = \'" + pro_name + "\';"
