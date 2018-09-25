@@ -5,6 +5,7 @@ from .models import Product_real
 import MySQLdb
 from furl import furl
 import urllib.parse as urlparse
+import json
 
 # Create your views here.
 
@@ -35,13 +36,19 @@ def put_product(request):
                                  use_unicode=True,
                                  charset="utf8")
     cursor = connection.cursor()
-
+    #changed using JSON
     if request.method == 'PUT':
-        test = "http://test/test?"
-        test += request.read().decode('utf-8')
-        parsed = urlparse.urlparse(test)
-        pro_name = urlparse.parse_qs(parsed.query)['pro_name'][0]
-        pro_count = urlparse.parse_qs(parsed.query)['pro_count'][0]
+        #test = "http://test/test?"
+        #test += request.read().decode('utf-8')
+        request_data  = ((request.body).decode('utf-8'))
+        request_data = json.loads(request_data)
+
+        #parsed = urlparse.urlparse(test)
+        #pro_name = urlparse.parse_qs(parsed.query)['pro_name'][0]
+        #pro_count = urlparse.parse_qs(parsed.query)['pro_count'][0]
+        pro_name = request_data['pro_name']
+        pro_count = request_data['pro_count']
+
         staff_data = [(str(pro_name),str(pro_count))]
         for p in staff_data:
             format_str = """INSERT INTO jungjong_product_real (pro_name , pro_count )
