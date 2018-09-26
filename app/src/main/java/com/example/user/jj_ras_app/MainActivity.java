@@ -38,8 +38,15 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params){
             String result; //요청 결과를 저장할 변수
-            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
-            result = requestHttpURLConnection.request(url, values);
+            readFromStream rStream = new readFromStream();
+            try {
+                result = rStream.read(rStream.makeHttpRequest(url));
+            } catch (Exception e){
+                result = null;
+                e.printStackTrace();
+            }
+            //RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
+            //result = requestHttpURLConnection.request(url, values);
 
             return result;
         }
