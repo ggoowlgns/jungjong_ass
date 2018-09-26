@@ -40,12 +40,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params){
             try {
-                Document doc = Jsoup.connect(url).get();
-                Elements tables = doc.select("table.table.table-striped");
-                System.out.println("----------------");
-                for(Element e: tables){
-                    res += e.text().trim();
-                }
+                readFromStream reads = new readFromStream();
+                reads.read(reads.makeHttpRequest(url));
+                //Document doc = Jsoup.connect(url).get();
+                //Elements tables = doc.select("table.table.table-striped");
+                //System.out.println("----------------");
+                //for(Element e: tables){
+                //    res += e.text().trim();
+                //}
             } catch (Exception e){
                 e.printStackTrace();
             }
