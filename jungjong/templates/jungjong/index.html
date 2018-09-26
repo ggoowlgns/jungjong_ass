@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <td><B>pro_name</B></td>
+            <td><B>pro_count</B></td>
+        </tr>
+        </thead>
+        <!-- 이 부분이 바뀌었습니다 -->
+        <tbody>
+        {% for pro in product%}  <!--for문 돌리는중-->
+        <tr>
+            <td> {{ pro.pro_name}} </td>
+            <td> {{ pro.pro_count}} </td>
+        </tr>
+        {% endfor %}
+        <!-- 여기까지 -->
+    </table>
+</body>
+</html>
