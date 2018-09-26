@@ -6,9 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView tv_outPut;
+    private String url = "https://220.67.124.128:8080";
+    private String res = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,45 +25,38 @@ public class MainActivity extends AppCompatActivity {
         // 위젯에 대한 참조
         tv_outPut = (TextView) findViewById(R.id.tv_outPut);
 
-        //URL 설정
-        String url = "https://220.67.124.128:8080/";
-
         //AsyncTask를 통해 HttpURLConnection 수행
-        NetworkTask networkTask = new NetworkTask(url, null);
+        NetworkTask networkTask = new NetworkTask();
         networkTask.execute();
     }
 
-    public class NetworkTask extends AsyncTask<Void, Void, String> {
-        private String url;
-        private ContentValues values;
-
-        public NetworkTask(String url, ContentValues values){
-            this.url = url;
-            this.values = values;
+    public class NetworkTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
         }
 
+
         @Override
-        protected String doInBackground(Void... params){
-            String result; //요청 결과를 저장할 변수
-            readFromStream rStream = new readFromStream();
+        protected Void doInBackground(Void... params){
             try {
-                result = rStream.read(rStream.makeHttpRequest(url));
+                Document doc = Jsoup.connect(url).get();
+                Elements tables = doc.select("table.table.table-striped");
+                System.out.println("----------------");
+                for(Element e: tables){
+                    res += e.text().trim();
+                }
             } catch (Exception e){
-                result = null;
                 e.printStackTrace();
             }
             //RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
             //result = requestHttpURLConnection.request(url, values);
-
-            return result;
+            return null;
         }
 
         @Override
-        protected void onPostExecute(String s){
-            super.onPostExecute(s);
-
-            //doInBackground()로 부터 리턴된 값이 onPostExecute의 매개변수로 넘어오므로 s를 출력한다
-            tv_outPut.setText(s);
+        protected void onPostExecute(Void result){
+            tv_outPut.setText(res);
         }
     }
 }
